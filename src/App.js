@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './backend/login';
 import Register from './backend/register';
+import ResetPassword from './backend/resetPassword'; 
 import { supabaseClient } from './backend/supabaseClient';
 import './App.css';
 
@@ -10,7 +11,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session first
     const getInitialSession = async () => {
       try {
         const { data } = await supabaseClient.auth.getSession();
@@ -24,7 +24,6 @@ function App() {
     
     getInitialSession();
     
-    // Set up auth state listener
     const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -49,6 +48,10 @@ function App() {
           <Route 
             path="/register" 
             element={session ? <Register /> : <Navigate to="/" />} 
+          />
+          <Route 
+            path="/reset-password" 
+            element={<ResetPassword />} 
           />
         </Routes>
       </div>
